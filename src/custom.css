@@ -1,0 +1,21 @@
+html body {
+    margin-top: 60px;
+}
+body { /* can also be whatever container */
+    display: -webkit-flex;
+    display: flex;
+    -webkit-align-items: center;
+    align-items: center;
+    -webkit-justify-content: center;
+    justify-content: center;
+}
+.navbar{
+    background-color: #007bff;
+}
+.imgStyle{
+    width: 60px;
+    height: 35px;
+}
+h4{
+    color: navy;
+}
