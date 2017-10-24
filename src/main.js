@@ -30,7 +30,7 @@ function outputHtml(apiResult) {
     </div>
     <div class="col-md-8 d-flex justify-content-center mt-3">
         <h5>${apiResult.current_observation.weather}</h5><br>
-        <img style="width: 20%;" src="${apiResult.current_observation.icon_url}">
+        <img style="width: 20%" src="${apiResult.current_observation.icon_url}">
     </div>
     <div class="col-md-8 d-flex justify-content-center">
         <p class="h1 display-3" id="mainTemp">${apiResult.current_observation.temp_c}&degC</p>
