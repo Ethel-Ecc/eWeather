@@ -1,7 +1,6 @@
-html body {
-    margin-top: 60px;
-}
+
 body { /* can also be whatever container */
+    margin-top: 60px;
     display: -webkit-flex;
     display: flex;
     -webkit-align-items: center;
@@ -18,4 +17,7 @@ body { /* can also be whatever container */
 }
 h4{
     color: navy;
+}
+button :hover{
+    cursor: pointer;
 }

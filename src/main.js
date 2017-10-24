@@ -28,13 +28,15 @@ function outputHtml(apiResult) {
     <div class="col-md-8 d-flex justify-content-center">
        <span class="h3 mt-4">${apiResult.current_observation.display_location.full}</span>
     </div>
-    <div class="col-md-8 d-flex justify-content-center mt-5">
+    <div class="col-md-8 d-flex justify-content-center mt-3">
         <h5>${apiResult.current_observation.weather}</h5><br>
-        <img src="${apiResult.current_observation.icon_url}">
+        <img style="width: 20%;" src="${apiResult.current_observation.icon_url}">
     </div>
     <div class="col-md-8 d-flex justify-content-center">
-        <p class="h1 display-3 changer">${apiResult.current_observation.temp_c}&degC</p>
-        <span>[${apiResult.current_observation.temp_f} &nbsp;F]</span>
+        <p class="h1 display-3" id="mainTemp">${apiResult.current_observation.temp_c}&degC</p>
+        <span>
+        <button id="changeTemp" class="btn btn-sm" style="border: 0; background-color: inherit; cursor: pointer" data-toggle="tooltip" data-placement="top" title="change value">
+            ${apiResult.current_observation.temp_f} F</button></span>
     </div>
     
     <br>
@@ -43,12 +45,23 @@ function outputHtml(apiResult) {
             <li class="list-group-item"><strong>Relative Humidity: </strong> ${apiResult.current_observation.relative_humidity}</li>
             <li class="list-group-item"><strong>Air Pressure: </strong> ${apiResult.current_observation.pressure_in}</li>
             <li class="list-group-item"><strong>Visibility(in "km"): </strong> ${apiResult.current_observation.visibility_km}</li>
-            <li class="list-group-item"><strong>Wind Direction: </strong>${apiResult.current_observation.wind_degrees}&nbsp; ${apiResult.current_observation.wind_dir}, &nbsp;${apiResult.current_observation.wind_string}</li>
-            <li class="list-group-item"><strong>Local Time: </strong> ${apiResult.current_observation.local_time_rfc822}</li>
+            <li class="list-group-item"><strong>Wind Speed & Directions: </strong>${apiResult.current_observation.wind_degrees}&nbsp; ${apiResult.current_observation.wind_dir}, &nbsp;${apiResult.current_observation.wind_string}</li>
+            <li class="list-group-item"><strong>Date and Time : </strong> ${apiResult.current_observation.local_time_rfc822}</li>
+            <li class="list-group-item"><strong>Meteorological Observatory: </strong> ${apiResult.current_observation.observation_location.city}</li>
         </ul>
     </div>
     `);
+    document.getElementById("changeTemp").addEventListener("click", changer);
     console.log(apiResult);
+}
+
+function changer() {
+    let updater1 = document.getElementById("changeTemp").textContent;
+    let mainTemp = document.getElementById("mainTemp").textContent;
+
+    document.getElementById("mainTemp").textContent = updater1;
+    document.getElementById("changeTemp").textContent = mainTemp;
+
 }
 
 function errorMessage() {
