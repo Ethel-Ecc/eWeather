@@ -2,21 +2,18 @@ $(document).ready(function () {
     // gets the user Lat and long values
     navigator.geolocation.getCurrentPosition(userResult, errorMessage);
 });
-
+// Do not touch the lines of codes from [6-28]!!
 function userResult(xyz) {
     "use strict";
-    //Reverse Geo-coding to convert the lat and long values to the user city and state.
+    // Dont touch this line of code!!
+    // Reverse Geo-coding to convert the lat and long values to the user city and state.
     $.ajax({
         url: "https://maps.googleapis.com/maps/api/geocode/json?latlng=" + xyz.coords.latitude + "," + xyz.coords.longitude + "&key=AIzaSyAtSsANZMFQ16rwdZup7Bk5U-sSszA63bE",
     }).done(function (xyzResult) {
+        let cityName = xyzResult.results["0"].address_components[1].long_name; //declared from response from google
         // pass the city and state to the weather api to get the local weather.
-        console.log("Google response below");
-        let cityName = xyzResult.results["0"].address_components[4].long_name;
-        let stateName = xyzResult.results["0"].address_components[5].long_name;
-        let shortStateName = xyzResult.results["0"].address_components[5].short_name;
-        console.log(cityName, stateName, shortStateName);
         $.ajax({
-            url: "http://api.wunderground.com/api/525fe45aef36fb27/conditions/q/"+"/"+shortStateName+"/"+cityName+".json",
+            url: "https://api.apixu.com/v1/forecast.json?key=26ce8308108545bfbaa122447172510&q="+cityName+"&days=2",
         }).done(function (apiResult) {
             outputHtml(apiResult);
         });
@@ -26,28 +23,36 @@ function outputHtml(apiResult) {
 
     $("#apiResult").html(`
     <div class="col-md-8 d-flex justify-content-center">
-       <span class="h3 mt-4">${apiResult.current_observation.display_location.full}</span>
+       <span class="h4 mt-4">${apiResult.location.name},&nbsp;${apiResult.location.region}</span>
     </div>
     <div class="col-md-8 d-flex justify-content-center mt-3">
-        <h5>${apiResult.current_observation.weather}</h5><br>
-        <img style="width: 20%" src="${apiResult.current_observation.icon_url}">
+        <h5>${apiResult.current.condition.text}</h5><br>
+        <img style="width: 20%" src="${apiResult.current.condition.icon}">
     </div>
     <div class="col-md-8 d-flex justify-content-center">
-        <p class="h1 display-3" id="mainTemp">${apiResult.current_observation.temp_c}&degC</p>
+        <p class="h1 display-3" id="mainTemp">${apiResult.current.temp_c}&degC</p>
         <span>
         <button id="changeTemp" class="btn btn-sm" style="border: 0; background-color: inherit; cursor: pointer" data-toggle="tooltip" data-placement="top" title="change value">
-            ${apiResult.current_observation.temp_f} F</button></span>
+            ${apiResult.current.temp_f} F</button></span>
     </div>
     
     <br>
+    <div class="col-md-8 mb-3">
+        <ul class="list-group" >
+            <li class="list-group-item"><strong>Relative Humidity: </strong> ${apiResult.current.humidity}%</li>
+            <li class="list-group-item"><strong>Air Pressure: </strong> ${apiResult.current.pressure_in}in</li>
+            <li class="list-group-item"><strong>Visibility: </strong> ${apiResult.current.vis_km}km</li>
+            <li class="list-group-item"><strong>Wind Speed & Direction: </strong>${apiResult.current.wind_kph}kph, ${apiResult.current.wind_degree}&deg ${apiResult.current.wind_dir}</li>
+        </ul>
+    </div><br>
     <div class="col-md-8">
         <ul class="list-group">
-            <li class="list-group-item"><strong>Relative Humidity: </strong> ${apiResult.current_observation.relative_humidity}</li>
-            <li class="list-group-item"><strong>Air Pressure: </strong> ${apiResult.current_observation.pressure_in}</li>
-            <li class="list-group-item"><strong>Visibility(in "km"): </strong> ${apiResult.current_observation.visibility_km}</li>
-            <li class="list-group-item"><strong>Wind Speed & Directions: </strong>${apiResult.current_observation.wind_degrees}&nbsp; ${apiResult.current_observation.wind_dir}, &nbsp;${apiResult.current_observation.wind_string}</li>
-            <li class="list-group-item"><strong>Date and Time : </strong> ${apiResult.current_observation.local_time_rfc822}</li>
-            <li class="list-group-item"><strong>Meteorological Observatory: </strong> ${apiResult.current_observation.observation_location.city}</li>
+            <li class="list-group-item d-flex justify-content-center"><strong>NEXT DAY FORECAST<br><span class="d-flex justify-content-center">${apiResult.forecast.forecastday[1].date}</span></strong>  </li>
+            <li class="list-group-item "><strong>Conditions: </strong><span class="d-flex justify-content-center"> ${apiResult.forecast.forecastday[1].day.condition.text} <img src="${apiResult.forecast.forecastday[1].day.condition.icon}"></span> </li>
+            <li class="list-group-item"><strong>Average Temperature: </strong>${apiResult.forecast.forecastday[1].day.avgtemp_c}&degC ||&nbsp;${apiResult.forecast.forecastday[1].day.avgtemp_f}F</li>
+            <li class="list-group-item"><strong>Average Humidity: </strong> ${apiResult.forecast.forecastday[1].day.avghumidity} </li>
+            <li class="list-group-item"><strong>Average Visibility: </strong> ${apiResult.forecast.forecastday[1].day.avgvis_km}km ||&nbsp; ${apiResult.forecast.forecastday[1].day.avgvis_miles}miles</li>
+            <li class="list-group-item"><strong>Wind Speed </strong>${apiResult.forecast.forecastday[1].day.maxwind_kph}kph </li>
         </ul>
     </div>
     `);

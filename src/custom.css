@@ -7,6 +7,7 @@ body { /* can also be whatever container */
     align-items: center;
     -webkit-justify-content: center;
     justify-content: center;
+    margin-bottom: 50px;
 }
 .navbar{
     background-color: #007bff;
@@ -23,4 +24,7 @@ button :hover{
 }
 .desc{
     font-size: 10px;
+}
+.listdiv{
+    border: solid 1px navy;
 }
