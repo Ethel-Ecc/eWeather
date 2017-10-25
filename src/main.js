@@ -20,6 +20,12 @@ function userResult(xyz) {
     });
 }
 function outputHtml(apiResult) {
+    let userTime = new Date().getHours()+1;
+    let tempTime = "0";
+    if (userTime === 24){
+        userTime = tempTime;
+    }
+
 
     $("#apiResult").html(`
     <div class="col-md-8 d-flex justify-content-center">
@@ -47,17 +53,20 @@ function outputHtml(apiResult) {
     </div><br>
     <div class="col-md-8">
         <ul class="list-group">
-            <li class="list-group-item d-flex justify-content-center"><strong>NEXT DAY FORECAST<br><span class="d-flex justify-content-center">${apiResult.forecast.forecastday[1].date}</span></strong>  </li>
-            <li class="list-group-item "><strong>Conditions: </strong><span class="d-flex justify-content-center"> ${apiResult.forecast.forecastday[1].day.condition.text} <img src="${apiResult.forecast.forecastday[1].day.condition.icon}"></span> </li>
-            <li class="list-group-item"><strong>Average Temperature: </strong>${apiResult.forecast.forecastday[1].day.avgtemp_c}&degC ||&nbsp;${apiResult.forecast.forecastday[1].day.avgtemp_f}F</li>
-            <li class="list-group-item"><strong>Average Humidity: </strong> ${apiResult.forecast.forecastday[1].day.avghumidity} </li>
-            <li class="list-group-item"><strong>Average Visibility: </strong> ${apiResult.forecast.forecastday[1].day.avgvis_km}km ||&nbsp; ${apiResult.forecast.forecastday[1].day.avgvis_miles}miles</li>
-            <li class="list-group-item"><strong>Wind Speed </strong>${apiResult.forecast.forecastday[1].day.maxwind_kph}kph </li>
+            <li class="list-group-item d-flex justify-content-center list-group-item-primary""><strong>NEXT DAY FORECAST<br><span class="d-flex justify-content-center">${apiResult.forecast.forecastday[1].date}</span></strong>  </li>
+            <li class="list-group-item "><strong>Conditions: &nbsp;</strong><span class="d-flex justify-content-center"> ${apiResult.forecast.forecastday[1].day.condition.text} <img src="${apiResult.forecast.forecastday[1].day.condition.icon}"></span> </li>
+            <li class="list-group-item"><strong>Average Temperature: &nbsp;</strong>${apiResult.forecast.forecastday[1].day.avgtemp_c}&degC. &nbsp;${apiResult.forecast.forecastday[1].day.avgtemp_f} F</li>
+            <li class="list-group-item"><strong>Average Humidity: &nbsp;</strong> ${apiResult.forecast.forecastday[1].day.avghumidity} </li>
+            <li class="list-group-item"><strong>Average Visibility: &nbsp;</strong> ${apiResult.forecast.forecastday[1].day.avgvis_km}km. &nbsp; ${apiResult.forecast.forecastday[1].day.avgvis_miles}miles</li>
+            <li class="list-group-item"><strong>Wind Speed: &nbsp;</strong>${apiResult.forecast.forecastday[1].day.maxwind_kph}kph </li>
+            <li class="list-group-item"><strong>Heat Index: &nbsp;</strong>${apiResult.forecast.forecastday[1].hour[userTime].heatindex_c}&degC. &nbsp; ${apiResult.forecast.forecastday[1].hour[userTime].heatindex_f} F</li>
+            <li class="list-group-item"><strong>Probability for Rainfall or Snow: &nbsp;</strong>${apiResult.forecast.forecastday[1].hour[userTime].chance_of_rain}.${apiResult.forecast.forecastday[1].hour[userTime].chance_of_snow} </li>
         </ul>
     </div>
     `);
     document.getElementById("changeTemp").addEventListener("click", changer);
     console.log(apiResult);
+    console.log(userTime);
 }
 
 function changer() {
